@@ -96,7 +96,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('salaries.index') }}" class="nav-link {{ request()->routeIs('salaries.*') ? 'active' : '' }}">
+                            <a href="{{ route('employee.salaries') }}" class="nav-link {{ request()->routeIs('employee.salaries*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-coins"></i>
                                 <p>Lương theo tháng</p>
                             </a>

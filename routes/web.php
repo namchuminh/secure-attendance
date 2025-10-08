@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AttendanceEmployeeController;
+use App\Http\Controllers\SalaryEmployeeController;
 
 // Login & logout
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('access-logs', [AccessLogController::class, 'index'])->name('access-logs.index')->middleware('role:admin');
 
     Route::get('employee/attendances', [AttendanceEmployeeController::class, 'index'])->name('employee.attendances')->middleware('role:employee');
+    Route::get('employee/salaries', [SalaryEmployeeController::class, 'index'])->name('employee.salaries')->middleware('role:employee');
 
     // Hồ sơ cá nhân
     Route::get('profiles', [ProfileController::class, 'index'])->name('profiles.index');
