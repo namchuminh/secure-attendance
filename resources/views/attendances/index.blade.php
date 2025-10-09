@@ -91,8 +91,8 @@
                 </div>
 
                 {{-- Phân trang --}}
-                <div class="d-flex justify-content-center mt-3">
-                    {{ $attendances->appends(request()->query())->links() }}
+                <div>
+                    {{ $attendances->appends(request()->query())->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
