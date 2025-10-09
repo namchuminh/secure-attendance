@@ -40,7 +40,7 @@
 
                 <div class="mb-3">
                     <a href="{{ route('salaries.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Thêm bảng lương
+                        <i class="fas fa-plus"></i> Tính lương nhân viên
                     </a>
                 </div>
 
