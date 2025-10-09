@@ -50,5 +50,22 @@
         </div>
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+@if ($errors->any())
+    @foreach ($errors->all() as $error)
+        <script>
+            $(function () { toastr.error('{{ $error }}', 'Thất bại'); });
+        </script>
+    @endforeach
+@endif
 
+@if (session('success'))
+    <script>$(function () { toastr.success('{{ session('success') }}', 'Thành công'); });</script>
+@endif
+
+@if (session('error'))
+    <script>$(function () { toastr.error('{{ session('error') }}', 'Thất bại'); });</script>
+@endif
 </html>

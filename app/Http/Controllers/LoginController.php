@@ -44,7 +44,7 @@ class LoginController extends Controller
         // Ghi log đăng nhập thất bại (không có user_id thật)
         $this->logAction(null, "Đăng nhập thất bại (email: {$request->email})", $request);
 
-        return back()->withErrors(['email' => 'Email hoặc mật khẩu không đúng.'])->onlyInput('email');
+        return back()->withErrors(['error' => 'Email hoặc mật khẩu không đúng.'])->onlyInput('email');
     }
 
     // Đăng xuất
