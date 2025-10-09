@@ -4,12 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\AccessLog;
 
 class ProfileController extends Controller
 {
-    public function index()
+    protected function logAction($action, Request $request)
+    {
+        AccessLog::create([
+            'user_id' => auth()->id(),
+            'action' => $action,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+    }
+
+    public function index(Request $request)
     {
         $user = auth()->user();
+
         return view('profiles.index', compact('user'));
     }
 
@@ -25,11 +37,14 @@ class ProfileController extends Controller
 
         if ($request->filled('password')) {
             $validated['password'] = Hash::make($request->password);
+        } else {
+            $validated['password'] = $user->password;
         }
 
-        $validated['password'] = $user->password;
-
         $user->update($validated);
+
+        $this->logAction('Cập nhật thông tin cá nhân', $request);
+
         return back()->with('success', 'Cập nhật thông tin cá nhân thành công');
     }
 }

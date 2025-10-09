@@ -53,13 +53,13 @@
                         </a>
                     </li>
 
-                    @if(auth()->user()->role === 'admin')
+                    @if(auth()->user()->role == 'admin')
                         <li class="nav-header">QUẢN LÝ NHÂN SỰ</li>
                     @else
                         <li class="nav-header">QUẢN LÝ CHẤM CÔNG</li>
                     @endif
 
-                    @if(auth()->user()->role === 'admin')
+                    @if(auth()->user()->role == 'admin')
                         <li class="nav-item">
                             <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-users"></i>
@@ -103,7 +103,7 @@
                         </li>
                     @endif
 
-                    @if(auth()->user()->role === 'admin')
+                    @if(auth()->user()->role == 'admin')
                         <li class="nav-header">TÀI KHOẢN & CẤU HÌNH</li>
                         <li class="nav-item">
                             <a href="{{ route('profiles.index') }}" class="nav-link {{ request()->routeIs('profiles.index') ? 'active' : '' }}">
@@ -117,6 +117,12 @@
                                 <p>Cấu hình hệ thống</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('logout') }}" class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-right-from-bracket"></i>
+                                <p>Đăng Xuất</p>
+                            </a>
+                        </li>
                     @else
                         <li class="nav-header">TÀI KHOẢN</li>
                         <li class="nav-item">
@@ -127,7 +133,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('logout') }}" class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}">
-                                <i class="fas fa-right-from-bracket"></i>
+                                <i class="nav-icon fas fa-right-from-bracket"></i>
                                 <p>Đăng Xuất</p>
                             </a>
                         </li>

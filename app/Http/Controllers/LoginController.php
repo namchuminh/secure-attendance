@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AccessLog;
 
 class LoginController extends Controller
 {
+    protected function logAction($userId, $action, Request $request)
+    {
+        AccessLog::create([
+            'user_id' => $userId,
+            'action' => $action,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+    }
+
     // Hiển thị form đăng nhập
     public function showLoginForm()
     {
@@ -25,14 +35,14 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            // Điều hướng theo vai trò
             $user = Auth::user();
-            if ($user->role === 'admin') {
-                return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công');
-            } else {
-                return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công');
-            }
+            $this->logAction($user->id, 'Đăng nhập thành công', $request);
+
+            return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công');
         }
+
+        // Ghi log đăng nhập thất bại (không có user_id thật)
+        $this->logAction(null, "Đăng nhập thất bại (email: {$request->email})", $request);
 
         return back()->withErrors(['email' => 'Email hoặc mật khẩu không đúng.'])->onlyInput('email');
     }
@@ -40,6 +50,12 @@ class LoginController extends Controller
     // Đăng xuất
     public function logout(Request $request)
     {
+        $user = Auth::user();
+
+        if ($user) {
+            $this->logAction($user->id, 'Đăng xuất', $request);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

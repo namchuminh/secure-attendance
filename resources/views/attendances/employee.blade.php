@@ -53,8 +53,8 @@
                                 <tr>
                                     <td>{{ $loop->iteration + ($attendances->currentPage() - 1) * $attendances->perPage() }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->work_date)->format('d/m/Y') }}</td>
-                                    <td>{{ $item->check_in ?? '-' }}</td>
-                                    <td>{{ $item->check_out ?? '-' }}</td>
+                                    <td>{{ $item->check_in ? \Carbon\Carbon::parse($item->check_in)->format('H:i') : '-' }}</td>
+                                    <td>{{ $item->check_out ? \Carbon\Carbon::parse($item->check_out)->format('H:i') : '-' }}</td>
                                     <td>
                                         <span class="badge 
                                             {{ $item->status == 'Present' ? 'bg-success' :

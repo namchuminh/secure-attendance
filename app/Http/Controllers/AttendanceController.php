@@ -4,46 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\User;
+use App\Models\AccessLog;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
-    // Hiển thị danh sách chấm công (có tìm kiếm, lọc, phân trang)
+    // Ghi log hành động
+    protected function logAction($action, Request $request)
+    {
+        AccessLog::create([
+            'user_id' => auth()->id(),
+            'action' => $action,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+    }
+
+    // Hiển thị danh sách
     public function index(Request $request)
     {
         $query = Attendance::with('user');
 
-        // Tìm kiếm theo tên nhân viên
         if ($request->filled('name')) {
             $query->whereHas('user', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->name . '%');
             });
         }
 
-        // Lọc theo trạng thái
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Lọc theo ngày làm
         if ($request->filled('date')) {
             $query->whereDate('work_date', $request->date);
         }
 
-        // Phân trang (10 bản ghi/trang)
         $attendances = $query->orderBy('work_date', 'desc')->paginate(10);
 
         return view('attendances.index', compact('attendances'));
     }
 
-    // Form thêm mới
-    public function create()
+    public function create(Request $request)
     {
         $users = User::orderBy('name')->get();
+
         return view('attendances.form', compact('users'));
     }
 
-    // Lưu chấm công mới
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -57,18 +64,19 @@ class AttendanceController extends Controller
 
         Attendance::create($validated);
 
+        $this->logAction('Chấm công nhân viên #' . $validated['user_id'], $request);
+
         return redirect()->route('attendances.index')->with('success', 'Thêm chấm công thành công.');
     }
 
-    // Form sửa
-    public function edit($id)
+    public function edit($id, Request $request)
     {
         $attendance = Attendance::findOrFail($id);
         $users = User::orderBy('name')->get();
+
         return view('attendances.form', compact('attendance', 'users'));
     }
 
-    // Cập nhật bản ghi
     public function update(Request $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
@@ -82,14 +90,17 @@ class AttendanceController extends Controller
 
         $attendance->update($validated);
 
+        $this->logAction("Cập nhật chấm công #$id", $request);
+
         return redirect()->route('attendances.index')->with('success', 'Cập nhật chấm công thành công.');
     }
 
-    // Xóa bản ghi
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
         $attendance = Attendance::findOrFail($id);
         $attendance->delete();
+
+        $this->logAction("Xóa chấm công #$id", $request);
 
         return redirect()->route('attendances.index')->with('success', 'Đã xóa bản ghi chấm công.');
     }
