@@ -16,7 +16,7 @@ use App\Http\Controllers\SalaryEmployeeController;
 // Login & logout
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 
 // Các route yêu cầu đăng nhập

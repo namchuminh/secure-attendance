@@ -27,6 +27,8 @@ class ProfileController extends Controller
             $validated['password'] = Hash::make($request->password);
         }
 
+        $validated['password'] = $user->password;
+
         $user->update($validated);
         return back()->with('success', 'Cập nhật thông tin cá nhân thành công');
     }

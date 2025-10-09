@@ -28,9 +28,9 @@ class LoginController extends Controller
             // Điều hướng theo vai trò
             $user = Auth::user();
             if ($user->role === 'admin') {
-                return redirect()->route('dashboard.index')->with('success', 'Đăng nhập thành công');
+                return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công');
             } else {
-                return redirect()->route('attendances.employee')->with('success', 'Đăng nhập thành công');
+                return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công');
             }
         }
 

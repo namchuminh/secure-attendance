@@ -12,11 +12,12 @@
     <div class="login-box">
         <div class="card">
             <div class="card-header text-center">
-                <h4>ĐĂNG NHẬP</h4>
+                <h4><b>ĐĂNG NHẬP</b></h4>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('login.post') }}">
                     @csrf
+                    <label for="email">Email</label>
                     <div class="input-group mb-3">
                         <input type="email" name="email" class="form-control" placeholder="Email"
                             value="{{ old('email') }}" required>
@@ -25,7 +26,9 @@
                         </div>
                     </div>
 
+                    <label for="password">Mật khẩu</label>
                     <div class="input-group mb-3">
+                        
                         <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
                         <div class="input-group-append">
                             <div class="input-group-text"><span class="fas fa-lock"></span></div>
